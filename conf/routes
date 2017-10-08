@@ -1,0 +1,16 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET     /                                       Application.index
+GET     /streaming                              Application.streaming
+GET     /screenshot-part?{params}               Application.loadImg
+
+POST    /actionProceed                          Application.actionProceed
+
+
+GET     /favicon.ico                            404
+GET     /public/                                staticDir:public
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}

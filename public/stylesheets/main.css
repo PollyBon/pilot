@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.verticalCenter {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 30%;
+    height: 10%;
+    margin: auto;
+}
+
+.container {
+    background-color: lightyellow;
+    border: solid sandybrown 2px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    width: fit-content;
+    margin: auto;
+}
+
+.main {
+    height:90vh;
+}

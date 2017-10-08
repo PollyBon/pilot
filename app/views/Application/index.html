@@ -1,0 +1,16 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<script type="text/javascript">
+    $(function () {
+        $('#height').val($(window).height());
+    });
+</script>
+
+<div class = "main">
+    <form action="@{Application.streaming()}" method="GET">
+        <input type="hidden" name="height" id="height"/>
+        <input type="submit" value="Start streaming" class="verticalCenter button"/>
+    </form>
+</div>
+
