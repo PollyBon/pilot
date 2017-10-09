@@ -1,38 +1,49 @@
 package controllers;
 
+import play.cache.Cache;
+import play.data.validation.Required;
+import play.data.validation.Validation;
 import play.mvc.Controller;
-import utils.DemoImageUtil;
+import stubs.SourceOfImageStub;
 import utils.ImageUtil;
 
+import javax.validation.constraints.DecimalMin;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Application extends Controller {
 
-    public static void index() throws IOException {
+    public static void index() {
         render();
     }
 
-    public static void loadImg() {
-        byte[] bytes = DemoImageUtil.obtainImage();
+    public static void loadImg(@Required Integer x, @Required Integer y, @Required Integer w, @Required Integer h) {
+        if (Validation.hasErrors()) {
+            index();
+        }
+        byte[] bytes = (byte[]) Cache.get("currentImageBytes" + session.getId());
         BufferedImage image = ImageUtil.convertToImage(bytes);
-        BufferedImage part = image.getSubimage(Integer.parseInt(request.params.get("x")),
-                Integer.parseInt(request.params.get("y")),
-                Integer.parseInt(request.params.get("w")),
-                Integer.parseInt(request.params.get("h")));
+        BufferedImage part = image.getSubimage(x, y, w, h);
         renderBinary(ImageUtil.convertToInputStream(part));
     }
 
     public static void actionProceed() {
-        DemoImageUtil.switchToNewImage();
+        //Fulfill request from a client
+        //... and obtain the response
+        SourceOfImageStub sourceStub = (SourceOfImageStub) Cache.get("sourceStub" + session.getId());
+        sourceStub.nextImage();
+        byte[] bytes = sourceStub.getCurrentImageBytes();
+        Cache.replace("currentImageBytes" + session.getId(), bytes);
     }
 
-    public static void streaming(Integer height) {
-        session.put("viewPortHeight", height);
-        DemoImageUtil.switchToNewImage();
-        byte[] bytes = DemoImageUtil.obtainImage();
+    public static void streaming(@Required Integer height, @DecimalMin("1") Integer numberOfThreads) {
+        if (Validation.hasErrors()) {
+            index();
+        }
+        SourceOfImageStub sourceStub = new SourceOfImageStub();
+        byte[] bytes = sourceStub.getCurrentImageBytes();
+        Cache.add("sourceStub" + session.getId(), sourceStub); //We store this just for demo
+        Cache.add("currentImageBytes" + session.getId(), bytes);
         BufferedImage image = ImageUtil.convertToImage(bytes);
-        int numberOfThreads = DemoImageUtil.getNumberOfThreads();
         renderArgs.put("fragments", ImageUtil.splitToFragments(image, height, numberOfThreads));
         renderArgs.put("numberOfThreads", numberOfThreads);
 

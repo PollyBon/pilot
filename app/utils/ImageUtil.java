@@ -33,8 +33,7 @@ public class ImageUtil {
         } catch (IOException e) {
             Logger.error(e, "Conversion to InputStream failed");
         }
-        InputStream is = new ByteArrayInputStream(os.toByteArray());
-        return is;
+        return new ByteArrayInputStream(os.toByteArray());
     }
 
     public static List<Fragment> splitToFragments(BufferedImage image, int height, int threads) {

@@ -4,7 +4,7 @@
 
 GET     /                                       Application.index
 GET     /streaming                              Application.streaming
-GET     /screenshot-part?{params}               Application.loadImg
+GET     /screenshot-part                        Application.loadImg
 
 POST    /actionProceed                          Application.actionProceed
 

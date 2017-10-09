@@ -9,77 +9,24 @@
 #{/list}
 </div>
 
+<script src="@{'/public/javascripts/imageSplit.js'}" type="text/javascript" charset="${_response_encoding}"></script>
 <script type="text/javascript">
-    const imagePrefix = "screenshot-part?";
+    const imagePrefix = "@{Application.loadImg}?";
     const numberOfThreads = ${numberOfThreads};
-    let currentLoadings = 0;
-    let fragments = $('.image-block-mark');
+    const actionProceed = #{jsAction @Application.actionProceed() /};
+    const markClassMame = '.image-block-mark';
+    ImageSplit.init(imagePrefix, numberOfThreads, markClassMame);
 
     function processAction() {
-        $('.image-block-mark').children().attr("src", "");
-        fragments = $('.image-block-mark');
-        currentLoadings = 0;
-        var actionProceed = #{jsAction @Application.actionProceed() /};
-        $.post(actionProceed(), checkFragments());
-    }
-
-    function isVisible(element) {
-        let viewPortTop = $(window).scrollTop();
-        let viewPortBottom = viewPortTop + $(window).height();
-        let elementTop = $(element).offset().top;
-        let elementBottom = elementTop + $(element).height();
-        return ((elementBottom <= viewPortBottom) && (elementBottom >= viewPortTop))
-                || ((elementTop <= viewPortBottom) && (elementTop >= viewPortTop));
-    }
-
-    function setSrc(index) {
-        let img = fragments[index].childNodes[1];
-        img.src = imagePrefix + img.id + '&' + new Date().getTime();
-        currentLoadings++;
-        fragments.splice(index, 1);
-        img.onload = chooseNext.bind(null, img);
-    }
-
-    function chooseNext(img) {
-        currentLoadings--;
-        if (currentLoadings < numberOfThreads && fragments.length > 0) {
-            let closest = getYCoord(fragments[0].childNodes[1]);
-            let yCoordImg = getYCoord(img);
-            for (index = 1; index < fragments.length; index++) {
-                let yCoord = getYCoord(fragments[index].childNodes[1]);
-                if (Math.abs(yCoord - yCoordImg) < Math.abs(closest - yCoordImg)) {
-                    closest = yCoord;
-                }
-            }
-            for (index = 0; index < fragments.length; index++) {
-                let yCoord = getYCoord(fragments[index].childNodes[1]);
-                if (closest == yCoord) {
-                    setSrc(index);
-                    break;
-                }
-            }
-        }
-    }
-
-    function getYCoord(element) {
-        return element.id.match(/y=(\d+)/)[1];
-    }
-
-    function checkFragments() {
-        for (index = 0; index < fragments.length;) {
-            if (isVisible(fragments[index])) {
-                setSrc(index);
-            } else {
-                index++;
-            }
-        }
+        ImageSplit.clear();
+        $.post(actionProceed(), ImageSplit.checkFragments());
     }
 
     $(function () {
-        checkFragments()
+        ImageSplit.checkFragments()
     });
 
-    $(document).on('scroll', checkFragments);
+    $(document).on('scroll', ImageSplit.checkFragments);
     $('body').on('click', processAction);
 
 </script>
