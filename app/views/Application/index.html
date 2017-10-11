@@ -1,19 +1,8 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-<script type="text/javascript">
-    const defaultNumberOfThreads = 6;
-
-    $(function () {
-        $('#height').val($(window).height());
-        $('#numberOfThreads').val(defaultNumberOfThreads);
-    });
-</script>
-
 <div class = "main">
     <form action="@{Application.streaming}" method="GET">
-        <input type="hidden" name="height" id="height"/>
-        <input type="hidden" name="numberOfThreads" id="numberOfThreads"/>
         <input type="submit" value="Start streaming" class="verticalCenter button"/>
     </form>
 </div>

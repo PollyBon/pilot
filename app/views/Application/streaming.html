@@ -1,28 +1,32 @@
 #{extends 'main.html' /}
 #{set title:'Streaming' /}
 
-<div class="container">
-#{list items:fragments, as:'fragment'}
-    <div class="image-block-mark" style="height: ${fragment.height}px;">
-        <img src='' id='${fragment.params}' style="max-height: ${fragment.height}px;"/>
-    </div>
-#{/list}
-</div>
+<div class="container"></div>
 
 <script src="@{'/public/javascripts/imageSplit.js'}" type="text/javascript" charset="${_response_encoding}"></script>
 <script type="text/javascript">
     const imagePrefix = "@{Application.loadImg}?";
-    const numberOfThreads = ${numberOfThreads};
-    const actionProceed = #{jsAction @Application.actionProceed() /};
-    const markClassMame = '.image-block-mark';
-    ImageSplit.init(imagePrefix, numberOfThreads, markClassMame);
+    const domEntryPoint = '.container';
+    const imageHeight = ${height};
+    const imageWidth = ${width};
+    const actionProceed = #{jsRoute @Application.actionProceed() /};
 
     function processAction() {
-        ImageSplit.clear();
-        $.post(actionProceed(), ImageSplit.checkFragments());
+        $.ajax({
+            url: actionProceed.url(),
+            type: actionProceed.method,
+            success: rebuildCarcass
+        });
     }
 
+    var rebuildCarcass = function (data) {
+        ImageSplit.clear();
+        ImageSplit.init(imagePrefix, domEntryPoint, $.parseJSON(data).height, $.parseJSON(data).width);
+        ImageSplit.checkFragments();
+    };
+
     $(function () {
+        ImageSplit.init(imagePrefix, domEntryPoint, imageHeight, imageWidth);
         ImageSplit.checkFragments()
     });
 

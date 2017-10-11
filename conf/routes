@@ -5,8 +5,7 @@
 GET     /                                       Application.index
 GET     /streaming                              Application.streaming
 GET     /screenshot-part                        Application.loadImg
-
-POST    /actionProceed                          Application.actionProceed
+GET     /actionProceed                          Application.actionProceed
 
 
 GET     /favicon.ico                            404
