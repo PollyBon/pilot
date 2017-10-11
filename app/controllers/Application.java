@@ -40,7 +40,7 @@ public class Application extends Controller {
 
     public static void streaming() {
         SourceOfImageStub sourceStub = new SourceOfImageStub();
-        Cache.add("sourceStub" + session.getId(), sourceStub); //We store this just for demo
+        Cache.set("sourceStub" + session.getId(), sourceStub); //We store this just for demo
         byte[] bytes = sourceStub.getCurrentImageBytes();
         BufferedImage image = ImageUtil.convertToImage(bytes);
         renderArgs.put("height", image.getHeight());

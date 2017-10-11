@@ -12,6 +12,7 @@
     const actionProceed = #{jsRoute @Application.actionProceed() /};
 
     function processAction() {
+        ImageSplit.stopLoading();
         $.ajax({
             url: actionProceed.url(),
             type: actionProceed.method,

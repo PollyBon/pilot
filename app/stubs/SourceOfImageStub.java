@@ -16,7 +16,13 @@ public class SourceOfImageStub implements Serializable{
     private static String[] images = new String[] {
             "public/images/large1.jpg",
             "public/images/large2.jpg",
-            "public/images/large3.jpg"
+            "public/images/large3.jpg",
+            "public/images/small1.jpg",
+            "public/images/small2.jpg",
+            "public/images/small3.jpg",
+            "public/images/mid1.jpg",
+            "public/images/mid2.jpg",
+            "public/images/mid3.jpg"
     };
 
     private int counter;
@@ -28,7 +34,7 @@ public class SourceOfImageStub implements Serializable{
     }
 
     public void nextImage() {
-        String nextName = images[counter++ % 3];
+        String nextName = images[counter++ % 9];
         currentImageBytes = obtainImage(nextName);
     }
 

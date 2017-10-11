@@ -15,7 +15,7 @@ var ImageSplit = (function () {
             this.domEntryPoint = domEntryPoint;
             currentLoadings = 0;
 
-            renderFragments();
+            renderFragments.call(this);
             fragments = $("." + markClassMame);
         },
         checkFragments: function () {
@@ -27,24 +27,25 @@ var ImageSplit = (function () {
                 }
             }
         },
+        stopLoading: function () {
+            $("." + markClassMame).children().attr("src", "");
+        },
         clear: function () {
-            fragments = $("." + markClassMame);
-            fragments.children().attr("src", "");
-            fragments.remove();
+            $("." + markClassMame).remove();
             currentLoadings = 0;
         },
     };
 
     function renderFragments() {
-        let viewPortOccurrences = Math.floor(imageHeight / vpHeight);
-        viewPortOccurrences = viewPortOccurrences == 0 ? 1 : viewPortOccurrences;
-        let partHeight = Math.floor(imageHeight / viewPortOccurrences / defaultNumberOfThreads);
-        let partOccurr = Math.floor(imageHeight / partHeight);
-        let lastPartHeight = imageHeight - partHeight * (partOccurr - 1);
+        let viewPortOccurrences = Math.floor(this.imageHeight / vpHeight);
+        viewPortOccurrences = viewPortOccurrences === 0 ? 1 : viewPortOccurrences;
+        let partHeight = Math.floor(this.imageHeight / viewPortOccurrences / defaultNumberOfThreads);
+        let partOccurr = Math.floor(this.imageHeight / partHeight);
+        let lastPartHeight = this.imageHeight - partHeight * (partOccurr - 1);
         for (let i = 0; i < partOccurr - 1; i++) {
-            createDomElement(0, partHeight * i, partHeight, imageWidth).appendTo(domEntryPoint);
+            createDomElement(0, partHeight * i, partHeight, this.imageWidth).appendTo(this.domEntryPoint);
         }
-        createDomElement(0, partHeight * (partOccurr - 1), lastPartHeight, imageWidth).appendTo(domEntryPoint);
+        createDomElement(0, partHeight * (partOccurr - 1), lastPartHeight, this.imageWidth).appendTo(this.domEntryPoint);
     }
 
     function createDomElement(x, y, h, w) {

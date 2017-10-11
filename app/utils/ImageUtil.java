@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public class ImageUtil {
 
-    private static final String IMAGE_FORMAT = "jpg";
+    private static final String IMAGE_FORMAT = "jpeg";
 
     public static BufferedImage convertToImage(byte[] bytes) {
         BufferedImage image = null;
