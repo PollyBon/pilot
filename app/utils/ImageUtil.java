@@ -1,6 +1,4 @@
 package utils;
-
-import models.Fragment;
 import play.Logger;
 
 import javax.imageio.ImageIO;
@@ -9,8 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class ImageUtil {
 
@@ -34,19 +31,5 @@ public class ImageUtil {
             Logger.error(e, "Conversion to InputStream failed");
         }
         return new ByteArrayInputStream(os.toByteArray());
-    }
-
-    public static List<Fragment> splitToFragments(BufferedImage image, int height, int threads) {
-        List<Fragment> fragments = new ArrayList<>();
-        int viewPortOccurrences = image.getHeight() / height;
-        viewPortOccurrences = viewPortOccurrences == 0 ? 1 : viewPortOccurrences;
-        int partHeight = image.getHeight() / viewPortOccurrences / threads;
-        int partOccurr = image.getHeight() / partHeight;
-        int lastPartHeight = image.getHeight() - partHeight * (partOccurr - 1);
-        for (int i = 0; i < partOccurr - 1; i++) {
-            fragments.add(new Fragment(0, partHeight * i, partHeight, image.getWidth()));
-        }
-        fragments.add(new Fragment(0, partHeight * (partOccurr - 1), lastPartHeight, image.getWidth()));
-        return fragments;
     }
 }
